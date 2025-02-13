@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Enter your username" required>
+        <input type="email" id="email" placeholder="Enter your LICET email" required>
+        <button id="sendOtpBtn" onclick="sendOTP()">Continue</button>
+
+        <div id="otp-section" class="hidden">
+            <input type="text" id="otp" placeholder="Enter OTP">
+            <button id="verifyOtpBtn" onclick="verifyOTP()">Verify OTP</button>
+        </div>
+    </div>
+
+    <script>
+        const sendOtpBtn = document.getElementById("sendOtpBtn");
+        const verifyOtpBtn = document.getElementById("verifyOtpBtn");
+
+        async function sendOTP() {
+            const email = document.getElementById("email").value.trim();
+            const username = document.getElementById("username").value.trim();
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@licet\.ac\.in$/;
+
+            if (!username) {
+                alert("Enter your username");
+                return;
+            }
+            if (!emailPattern.test(email)) {
+                alert("Enter a valid LICET email ID");
+                return;
+            }
+
+            sendOtpBtn.disabled = true;
+            sendOtpBtn.innerText = "Sending OTP...";
+
+            try {
+                const response = await fetch("http://localhost:5000/send-otp", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email }),
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    document.getElementById("otp-section").classList.remove("hidden");
+                    alert("OTP sent to your email");
+                } else {
+                    alert("Failed to send OTP: " + data.error);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Something went wrong, please try again!");
+            } finally {
+                sendOtpBtn.disabled = false;
+                sendOtpBtn.innerText = "Continue";
+            }
+        }
+
+        async function verifyOTP() {
+            const email = document.getElementById("email").value.trim();
+            const otp = document.getElementById("otp").value.trim();
+
+            if (!otp) {
+                alert("Enter the OTP");
+                return;
+            }
+
+            verifyOtpBtn.disabled = true;
+            verifyOtpBtn.innerText = "Verifying...";
+
+            try {
+                const response = await fetch("http://localhost:5000/verify-otp", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, otp }),
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    alert("Login successful!");
+                    window.location.href = "dashboard.html"; // Redirect on success
+                } else {
+                    alert("Invalid OTP, please try again.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Something went wrong, please try again!");
+            } finally {
+                verifyOtpBtn.disabled = false;
+                verifyOtpBtn.innerText = "Verify OTP";
+            }
+        }
+    </script>
+</body>
+</html>
