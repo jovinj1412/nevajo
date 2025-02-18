@@ -1,0 +1,84 @@
+/* App.css */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #000000, #1a1a1a);
+  transition: opacity 0.5s ease-out;
+}
+
+.logo {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 150px;
+}
+
+.text-content {
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.licet {
+  font-size: 4rem;
+  font-weight: bold;
+  opacity: 0;
+  transform: scale(0.5);
+  animation: fadeInScale 1.5s ease-out forwards;
+  background: linear-gradient(135deg, #c0c0c0, #888888, #505050, #888888, #c0c0c0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.licord {
+  font-size: 2rem;
+  opacity: 0;
+  animation: fadeIn 1.5s ease-out 1.5s forwards;
+  background: linear-gradient(135deg, #d1d1d1, #a0a0a0, #737373, #a0a0a0, #d1d1d1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding: 12px 24px;
+  border: 2px solid #737373;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  display: inline-block;
+  text-decoration: none;
+  border-radius: 8px;
+}
+
+.licord:hover {
+  background: linear-gradient(135deg, #e0e0e0, #b5b5b5, #868686, #b5b5b5, #e0e0e0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  border: 2px solid #b5b5b5;
+  padding: 14px 26px;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  opacity: 1;
+}
+
+.fade-out {
+  opacity: 0;
+}
